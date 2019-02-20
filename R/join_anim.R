@@ -5,7 +5,7 @@
 #' @import htmlwidgets
 #'
 #' @export
-join_anim <- function(join_type = "left", speed = 1, x, y, by, width = NULL, height = NULL) {
+join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL) {
 
   # forward options using x
   data = list(data = process_join(x = x, y = y, key = by, complete_action = FALSE,
@@ -20,3 +20,12 @@ join_anim <- function(join_type = "left", speed = 1, x, y, by, width = NULL, hei
   )
 }
 
+#' @export
+join_animOutput <- function(outputId, width = "100%", height = "100%") {
+  shinyWidgetOutput(outputId, "join_anim", width, height, package = "dataAnim")
+}
+#' @export
+join_animRender <- function(expr, env = parent.frame(), quoted = FALSE) {
+  if (!quoted) { expr <- substitute(expr) } # force quoted
+  shinyRenderWidget(expr, join_animOutput, env, quoted = TRUE)
+}

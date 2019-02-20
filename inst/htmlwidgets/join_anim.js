@@ -53,11 +53,11 @@ HTMLWidgets.widget({
         let xtbl_start = {
           x: svg_width * 0.05,
           y: svg_height * 0.05
-        }
+        };
         let ytbl_start = {
           x: svg_width - svg_width * 0.05 - x_scale(ytbl_width),
           y: svg_height * 0.05
-        }
+        };
 
         // width of tables
         let x_width = arr_scale(data.x_w[0], x_scale);
@@ -93,8 +93,8 @@ HTMLWidgets.widget({
                   } else {
                     iso_tbl(join_type, height, speed, 0);
                   }
-                })
-            })
+                });
+            });
 
       },
 
