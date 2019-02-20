@@ -1,0 +1,87 @@
+/* body {
+  background-color: pink;
+} */
+.pulse1s {
+    fill: black;
+    -webkit-animation-name: pulse2skf; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    animation-name: pulse1skf;
+    animation-duration: 1s;
+}
+@keyframes pulse1skf {
+    0%   {fill: white;}
+    25%  {fill: yellow;}
+    50%  {fill: white;}
+    100% {fill: yellow;}
+}
+
+
+.pulse2s {
+    fill: black;
+    -webkit-animation-name: pulse2skf; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
+    animation-name: pulse2skf;
+    animation-duration: 2s;
+}
+@keyframes pulse2skf {
+    0%   {fill: white;}
+    25%  {fill: yellow;}
+    50%  {fill: white;}
+    100% {fill: yellow;}
+}
+.pulse2s-2 {
+    fill: black;
+    -webkit-animation-name: pulse2skf; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
+    animation-name: pulse2skf-2;
+    animation-duration: 2s;
+}
+@keyframes pulse2skf-2 {
+    0%   {fill: white;}
+    25%  {fill: red;}
+    50%  {fill: white;}
+    100% {fill: red;}
+}
+
+.pulse4s {
+    fill: black;
+    -webkit-animation-name: pulse4skf; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    animation-name: pulse4skf;
+    animation-duration: 4s;
+}
+@keyframes pulse4skf {
+    0%   {fill: white;}
+    25%  {fill: red;}
+    50%  {fill: white;}
+    100% {fill: red;}
+}
+
+line,path {
+/* #linking-cell { */
+  stroke: blue;
+  stroke-width: 2.5;
+}
+.qm {
+  text-anchor: start;
+}
+.qm2 {
+    text-anchor: end;
+}
+text {
+  text-anchor: middle;
+  alignment-baseline: central;
+}
+
+.x_rows:nth-child(1) > .x_cols > text {
+  font-weight: bold;
+}
+
+.y_rows:nth-child(1) > .y_cols > text {
+  font-weight: bold;
+}
+
+rect {
+  fill: white;
+  stroke: grey;
+}
