@@ -73,7 +73,7 @@
  }
 
  function a_outersect(a, b) {
-   return a.filter(x => !b.includes(x));
+   return a.filter(x => !b.includes(x))
  }
 
  function arr_last(arr) {
@@ -110,7 +110,11 @@
    }
  }
 
- function db_pulse_rect(nodes, col, tran_time = 1000, delay_time = 0) {
+ function anim_setup() {
+
+ }
+
+ function db_pulse_rect(nodes, col, tran_time = 1000, delay_time = 0, keep_highlighted = false) {
    // input is a rect node not col node or selection
 
    // pulse the rects twice with the duration of tran_time
@@ -131,6 +135,13 @@
            .style("fill", og_col);
        }
      }
+
+     if (keep_highlighted === true) {
+       d3.select(nodes)
+         .transition()
+         .delay(delay_time + tran_time)
+         .style("fill", col);
+     }
    } else {
      nodes.forEach(function (d, i) {
        for (var j = 0; j < 4; j++) {
@@ -147,6 +158,12 @@
              .delay(delay_time + tran_time / 4 * j)
              .style("fill", null);
          }
+       }
+       if (keep_highlighted === true) {
+         d3.select(d)
+           .transition()
+           .delay(delay_time + tran_time)
+           .style("fill", col);
        }
      })
    }
@@ -191,30 +208,56 @@
    return store;
  }
 
- function link_rect_line(base, base_key_rect_xy, dest = -1, qm_align = "left", tran_time = 2000, delay_time = 0, removeall = true) {
+ function link_rect_line(base, base_key_rect_xy, dest = -1, qm_align = "left", tran_time = 2000, delay_time = 0,
+   msg, removeall = true) {
    // input is a rect node not col node or selection
    // draw lines to link rectangles can be 1-1 or 1-many
    // this includes pulsing the rects
    // question mark will be drawn if dest is not set
+
+   // get rect height
    let rect_height = parseFloat(d3.select("rect").attr("height"));
+   // get all rect width then find the min width
+   let rect_width = null;
+   d3.select(".x_rows")
+     .selectAll("rect")
+     .each(function (d, i) {
+       cur_width = d3.select(this).attr("width");
+       if (i == 0) {
+         rect_width = cur_width;
+       } else {
+         if (cur_width < rect_width) {
+           rect_width = cur_width;
+         }
+       }
+     });
+
    let cond = dest;
    let qm_tran_time = tran_time * 0.8;
-   let return_delay = delay_time + tran_time;
+   let qm_delay_time = qm_tran_time;
+   let gray_time = 500;
+   //  let return_delay = delay_time + tran_time;
    let base_node = base;
    let dest_node = dest;
+   let mid_cord = tbl_mid_cord("x", "y");
+   // msgbox variables;
+   let msg_trantime = tran_time / 2;
+   let msg_pause = 2000;
 
    // pulse rect
-   db_pulse_rect(base_node, "yellow", tran_time, delay_time)
+   db_pulse_rect(base_node, "yellow", tran_time, delay_time, true);
    if (cond != -1) {
-     db_pulse_rect(dest_node, "yellow", tran_time, delay_time)
+     db_pulse_rect(dest_node, "yellow", tran_time, delay_time, true);
    }
 
+   // starting node rect mid cord (left tbl for left join)
    base = rect_mid_cord(base)[0];
    if (cond == -1) {
+     // if no match then the destination for the line wil be in the middle
      dest = [tbl_mid_cord("x", "y")]
-     return_delay = return_delay + qm_tran_time;
+     //  return_delay = return_delay + qm_tran_time;
    } else {
-     dest = rect_mid_cord(dest)
+     dest = rect_mid_cord(dest);
    }
 
    // deciding if qm is left or right aligned
@@ -224,63 +267,103 @@
      qm_class = "qm2";
    }
 
-   // animate line
+   let link_line = new Array();
+
+   // create initial line
    dest.forEach(function (d, i) {
-     // create line
-     link_line = d3.select("svg")
-       .append("line");
-     link_line.attr("x1", base_key_rect_xy["x"])
+     link_line_i = d3.select("svg")
+       .append("line")
+       .attr("x1", base_key_rect_xy["x"])
        .attr("y1", base_key_rect_xy["y"])
        .attr("x2", base_key_rect_xy["x"])
        .attr("y2", base_key_rect_xy["y"]);
+     // push all lines into an array to loop over later
+     link_line.push(link_line_i);
+   })
 
-     // animate line
-     link_line
-       .transition()
-       .duration(tran_time)
+   // if there is a match
+   if (cond != -1) {
+     // animate line to match
+     link_line.forEach(function (d, i) {
+       d.transition()
+         .delay(delay_time)
+         .duration(tran_time)
+         .attr("x2", dest[i]["x"])
+         .attr("y2", dest[i]["y"]);
+     })
+     delay_time = delay_time + tran_time;
+   } else { // if there is no match
+     // animate line to middle
+     link_line.forEach(function (d, i) {
+       d.transition()
+         .delay(delay_time)
+         .duration(tran_time)
+         .attr("x2", dest[i]["x"])
+         .attr("y2", dest[i]["y"]);
+     })
+
+     delay_time = delay_time + tran_time;
+     // animate qm then remove it
+     qm = d3.select("svg")
+       .append("text")
+       .attr("class", qm_class)
+       .attr("x", dest[0]["x"])
+       .attr("y", dest[0]["y"])
+      //  .text("?")
+       .style("font-size", 0);
+     qm.transition()
        .delay(delay_time)
-       .attr("x2", d["x"])
-       .attr("y2", d["y"])
+       .duration(qm_tran_time)
+       .text("?x")
+       .style("font-size", rect_height * 1.5)
+      //  .on("end", function(){
+      //    d3.select(this)
+      //     .remove();
+      //  })
+     delay_time = delay_time + qm_tran_time;
+   }
+
+   // if need to display msg
+   if (msg["msg"] != undefined) {
+     // calculate xy for the msg box
+     let msg_x = new Array();
+     let msg_y = new Array();
+     link_line.forEach(function (d, i) {
+       msg_x.push((dest[0]["x"] + base_key_rect_xy["x"]) / 2);
+       msg_y.push((dest[0]["y"] + base_key_rect_xy["y"]) / 2);
+     });
+     // obtain the mean of the array just incase there are more than 1 line
+     msg_x = arr_sum(msg_x) / msg_x.length;
+     msg_y = arr_sum(msg_y) / msg_y.length;
+
+     // show msg
+     delay_time = msg_box(msg_x, msg_y, rect_width * 3, rect_height * 2, msg["msg"], delay_time, msg_trantime, msg_pause);
+     delay_time = delay_time + tran_time / 2;
+   }
+
+   // remove line
+   link_line.forEach(function (d, i) {
+     d.transition()
+       .delay(delay_time)
        .on("end", function () {
-         link_line = d3.select(this);
-         // add questionmark if necessary
-         if (cond == -1) {
-           // create question mark
-           qm = d3.select("svg")
-             .append("text")
-             .attr("class", qm_class)
-             // .classed(qm_class, true)
-             .attr("x", d["x"])
-             .attr("y", d["y"])
-             .text("?")
-             .style("font-size", 0);
-           // animate qm then remove it
-           qm.transition()
-             .duration(qm_tran_time)
-             .style("font-size", rect_height * 1.5)
-             .on("end", function () {
-               if (removeall === true) {
-                 qm.remove();
-                 d3.selectAll(`.${qm_class}`).remove()
-                 link_line.remove()
-               }
-             });
-           // remove line
-           if (removeall === true) {
-             link_line
-               .transition()
-               .delay(qm_tran_time)
-               .remove()
-           }
-         } else {
-           // if no "?" remove line only
-           if (removeall === true) {
-             link_line.remove()
-           }
-         }
+         d3.select(this)
+           .remove();
+         d3.selectAll("rect")
+           .style("fill", null);
        });
    })
-   return return_delay;
+
+   // remove question mark if any
+   if (cond == -1) {
+     qm.transition()
+       .delay(delay_time)
+       .on("end", function () {
+         d3.select(this)
+           .remove();
+       });
+   }
+
+   return delay_time;
  }
 
 
@@ -461,7 +544,7 @@
  }
 
  function movexy_cell(node, rx, ry, tx, ty, adj_ty = null, width, tran_time, delay_time,
-   location = null, remove = false) {
+   location = null, msg = undefined, remove = false) {
    // input node should be something like .x_col where there are text inside
    // r-x/y is rect xy, t-x/y is for text xy
    // common adj_y is the height of a rect so the ycord can be in the middle of the rectangle
@@ -543,11 +626,10 @@
 
 
  function movexy_cell_wobj(node, xy, height, width, tran_time, delay_time,
-   location = null, join_type = "left", remove = false) {
+   location = null, join_type = "left", msg = undefined, remove = false) {
 
    let xy_keys = Object.keys(xy);
    let return_delay = 0;
-
 
    // make sure array methods can be applied on nodes
    if (node.length == undefined) {
@@ -571,8 +653,6 @@
          .duration(tran_time)
          .style("opacity", 0);
      }
-
-
      return_delay = return_delay + tran_time;
      return return_delay;
    }
@@ -586,7 +666,7 @@
      cur_node.forEach(function (d2, j) {
        movexy_cell(d3.select(d2).node(), xy[i]["x"][j], xy[i]["y"], xy[i]["x"][j],
          xy[i]["y"], height, width[j], tran_time, delay_time,
-         `.x_rows:nth-child(${location[i]})`, false)
+         `.x_rows:nth-child(${location[i]})`, msg, false)
      });
 
 
@@ -747,6 +827,76 @@
      y: parseFloat(first_rect.attr("y")) + parseFloat(first_rect.attr("height"))
    }
 
+ }
+
+ function msg_box(x, y, width = null, height = null, msg, start_time = 0, tran_time = 1000, pause_time = 1000, center = true) {
+
+   if (width == null) {
+     d3.select(".x_rows")
+       .selectAll("rect")
+       .each(function (d, i) {
+         cur_width = d3.select(this).attr("width");
+         if (i == 0) {
+           width = cur_width;
+         } else {
+           if (cur_width < width) {
+             width = cur_width;
+           }
+         }
+       });
+     width = width * 3;
+   }
+   if (height == null) {
+     height = parseFloat(d3.select("rect").attr("height")) * 2;
+   }
+   // if center == true
+   // adjust x and y so the msg box is in the middle of the given x y cord
+   if (center === true) {
+     x = x - width / 2;
+     y = y - height / 2;
+   }
+   //  text attrs
+   let txt_x = x + width / 2;
+   let txt_y = y + height / 2;
+   let txt_fontsize = d3.select("text")
+     .style("font-size");
+
+   // create msg box group
+   msgbox = d3.select("svg")
+     .append("g")
+     .attr("class", "msgbox");
+   // attrs in box
+   msgbox.append("rect")
+     .transition()
+     .delay(start_time)
+     .duration(tran_time)
+     .attr("x", x)
+     .attr("y", y)
+     .attr("width", width)
+     .attr("height", height);
+   // text in msg box
+   msgbox.append("text")
+     .attr("x", txt_x)
+     .attr("y", txt_y)
+     .style("font-size", 0)
+     .transition()
+     .delay(start_time)
+     .duration(tran_time)
+     .style("font-size", txt_fontsize)
+     .text(msg);
+
+   delay_time = start_time + tran_time;
+
+   msgbox
+     .transition()
+     .delay(delay_time)
+     .duration(pause_time)
+     .on("end", function () {
+       d3.select(this)
+         .remove();
+     })
+
+   return delay_time + pause_time;
  }
 
  function na_rects(x, y, width, height, location = null, tran_time = 1000, delay_time = 0) {
@@ -1117,6 +1267,13 @@
          .duration(tran_time)
          .attr("y", to_tbl_tl["y"] + height * i + height / 2);
      })
+     // make sure the column names are all in bold
+     d3.select(`.${to_tbl}_rows`)
+      .selectAll("text")
+      .transition()
+      .delay(delay_time)
+      .duration(tran_time)
+      .style("font-weight", "bold");
 
    delay_time = delay_time + tran_time;
 
@@ -1215,7 +1372,7 @@
 
 
 
- function join_anim(data, speed = 1, join_type = "left") {
+ function join_anim(data, speed = 1, join_type = "left", gray_out = true) {
    // original data
    let og_xtbl = d3.select(".x_tbl");
    let left_kcol_node = d3.select(".x_tbl")
@@ -1238,6 +1395,7 @@
    let line_tran_time = 1200 / speed;
    let shiftdown_time = 1500 / speed;
    let join_tran_time = 1500 / speed;
+   let gray_time = 200 / speed;
    let delay_time = 0;
 
    Object.keys(data).forEach(function (d, i) {
@@ -1250,7 +1408,11 @@
      // need to prepare since there are some rows may be shifted
      // it will be difficult getting them during animation
      let base_key_rect_xy = new Array();
-
+     // msg for output
+     let msg = {
+       msg: data[d][0].msg,
+       when: data[d][0].when
+     };
 
      // loop through the data, some object[i] may contain multiple arrays
      for (var j = 0; j < data[d].length; j++) {
@@ -1283,8 +1445,7 @@
      base_key_rect_xy["y"] = base_key_rect_xy["y"] + height * shift_adjy;
      // link the key rects with lines
      delay_time = link_rect_line(base_key_rect, base_key_rect_xy, dest_key_rect, "right",
-       line_tran_time, delay_time);
-
+       line_tran_time, delay_time, msg);
      // shift down rows if needed
      if (data[d].length > 1) {
        // the number of rows to shift down
@@ -1318,9 +1479,20 @@
      // using delay_time2 here instead of stacking delay_time since it cause
      // confusion in the code
      delay_time3 = movexy_cell_wobj(join_row_nodes, new_xy[d], height,
-       ytbl_nkey_wd, join_tran_time, delay_time2, join_row_selnum, join_type);
-
+       ytbl_nkey_wd, join_tran_time, delay_time2, join_row_selnum, join_type, msg);
      delay_time = delay_time2 + delay_time3;
+
+     // gary out used rows
+     if (gray_out === true) {
+       join_row_nodes.forEach(function (d, i) {
+         d3.select(d)
+           .transition()
+           .delay(delay_time)
+           .duration(gray_time)
+           .style("opacity", 0.3);
+       })
+       delay_time = delay_time + gray_time;
+     }
 
    });
 
@@ -1366,6 +1538,10 @@
    let xcol_key_ind = d3.select(".x_rows")
    let new_x = new Array();
    let new_width = new Array();
+
+   // msg box times
+   let msg_tran_time = 1500 / speed;
+   let msg_pause_time = 1500 / speed;
 
    col_ind.forEach(function (d, i) {
      new_x.push(parseFloat(d3.select(last_xrow_rects[d - 1]).attr("x")));
@@ -1414,32 +1590,43 @@
        .append("g")
        .attr("class", "x_rows");
    });
-
    delay_time = delay_time + new_time;
 
-   d3.selectAll("svg")
+   //  // msg box
+   //  msg_xy = tbl_mid_cord("x", "y");
+   //  delay_time = msg_box(parseFloat(msg_xy["x"]), parseFloat(msg_xy["y"]), null, null,
+   //    "Move across unused rows", delay_time, msg_tran_time, msg_pause_time, true);
+
+   // remove qm
+   d3.selectAll(".qm2")
      .transition()
      .delay(delay_time)
+     .duration(lineqm_time)
+     .style("font-size", 0)
      .on("end", function () {
-       d3.selectAll(".qm2")
-         .transition()
-         .duration(lineqm_time)
-         .style("font-size", 0)
-         .on("end", function () {
-           d3.select(this)
-             .remove();
-         });
-
-       d3.selectAll("line")
-         .transition()
-         .duration(lineqm_time)
-         .style("opacity", 0)
-         .on("end", function () {
-           d3.select(this)
-             .remove();
-         });
+       d3.select(this)
+         .remove();
+     });
+   // remove line
+   d3.selectAll("line")
+     .transition()
+     .delay(delay_time)
+     .duration(lineqm_time)
+     .style("opacity", 0)
+     .on("start", function () {
+       // msg box
+       msg_xy = tbl_mid_cord("x", "y");
+       new_time = msg_box(parseFloat(msg_xy["x"]), parseFloat(msg_xy["y"]), null, null,
+         "Move across unused rows", 0, msg_tran_time, msg_pause_time, true);
      })
-   delay_time = delay_time + lineqm_time;
+     .on("end", function () {
+       d3.select(this)
+         .remove();
+       d3.select(".y_tbl")
+         .selectAll("rect")
+         .style("fill", null);
+     });
+   delay_time = delay_time + lineqm_time + new_time;
 
    num_xrows2 = num_xrows;
    d3.selectAll("svg")
@@ -1549,18 +1736,37 @@
          });
      });
      delay_time = delay_time + 2 * na_time;
-
+     let num_xrows2 = num_xrows;
      // animate the na rects to show up
      x_nkey_last_rects.forEach(function (d, i) {
        row2move.forEach(function (d2, i2) {
-         na_rects(na_x[i], new_y[i2], na_width[i], height, `.x_rows:nth-child(${num_xrows})`,
+         na_rects(na_x[i], new_y[i2], na_width[i], height, `.x_rows:nth-child(${num_xrows + 1})`,
            na_time, delay_time);
+         num_xrows++;
        });
-       num_xrows++;
+       num_xrows = num_xrows2;
      });
-     delay_time = delay_time + na_time;
+
+     delay_time = delay_time + na_time * 2;
    }
+
+   // -------precausions
+   d3.selectAll("line")
+     .transition()
+     .delay(delay_time)
+     .on("end", function () {
+       d3.select(this)
+         .remove();
+       d3.selectAll(".qm2")
+         .style("opacity", 0);
+     });
+   // --------precausions
 
    return d3.select("svg")
      .transition().delay(delay_time);
  }
+
+
+
+
+ // export { draw_table, hi };

@@ -21,7 +21,7 @@ join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, hei
 }
 
 #' @export
-join_animOutput <- function(outputId, width = "100%", height = "100%") {
+join_animOutput <- function(outputId, width = "100%", height = "1000") {
   shinyWidgetOutput(outputId, "join_anim", width, height, package = "dataAnim")
 }
 #' @export
