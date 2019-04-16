@@ -9,7 +9,7 @@ join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, hei
 
   # forward options using x
   data = list(data = process_join(x = x, y = y, key = by, complete_action = FALSE,
-                                  asJSON = TRUE),
+                                  join_type = join_type, asJSON = TRUE),
               speed = speed, join_type = join_type)
   htmlwidgets::createWidget(
     name = 'join_anim',
