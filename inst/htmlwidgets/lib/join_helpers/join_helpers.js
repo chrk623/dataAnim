@@ -314,7 +314,7 @@
      qm.transition()
        .delay(delay_time)
        .duration(qm_tran_time)
-       .text("?x")
+       .text("?")
        .style("font-size", rect_height * 1.5)
       //  .on("end", function(){
       //    d3.select(this)
