@@ -11,13 +11,15 @@ join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, hei
   data = list(data = process_join(x = x, y = y, key = by, complete_action = FALSE,
                                   show_msg = show_msg, join_type = join_type, asJSON = TRUE),
               speed = speed, join_type = join_type)
-  htmlwidgets::createWidget(
+  out = htmlwidgets::createWidget(
     name = 'join_anim',
     data,
     width = width,
     height = height,
     package = 'dataAnim'
   )
+
+  return(out)
 }
 
 #' @export
