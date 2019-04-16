@@ -1,12 +1,13 @@
 process_join = function(x, y, key, height = 2, width = 5, svg_width = 1920, svg_height = 1080,
-                        complete_action = TRUE, join_type = "left", asJSON = FALSE, ...){
+                        complete_action = TRUE, join_type = "left", show_msg, asJSON = FALSE, ...){
 
   xy = left_join(x, y, by = key)
   temp = list(x = include_cn(x),
               y = include_cn(y),
               xy = include_cn(xy),
               height = height,
-              initial_prep = initial_prep(y ,x, key = key, join_type = join_type),
+              initial_prep = initial_prep(y ,x, key = key, join_type = join_type,
+                                          show_msg = show_msg),
               x_key_col = find_key_col(x, key = key),
               y_key_col = find_key_col(y, key = key),
               svg_width = svg_width, svg_height = svg_height)

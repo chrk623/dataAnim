@@ -5,11 +5,11 @@
 #' @import htmlwidgets
 #'
 #' @export
-join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL) {
+join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL, show_msg = F) {
 
   # forward options using x
   data = list(data = process_join(x = x, y = y, key = by, complete_action = FALSE,
-                                  join_type = join_type, asJSON = TRUE),
+                                  show_msg = show_msg, join_type = join_type, asJSON = TRUE),
               speed = speed, join_type = join_type)
   htmlwidgets::createWidget(
     name = 'join_anim',

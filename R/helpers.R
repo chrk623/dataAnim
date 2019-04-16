@@ -82,7 +82,7 @@ getwhen = function(x) {
   }
 }
 
-initial_prep = function(from_tbl, to_tbl, key, join_type, msg = T) {
+initial_prep = function(from_tbl, to_tbl, key, join_type, show_msg) {
   from_ind = which(colnames(from_tbl) == key)
   to_ind = which(colnames(to_tbl) == key)
 
@@ -95,26 +95,25 @@ initial_prep = function(from_tbl, to_tbl, key, join_type, msg = T) {
       return(x)
     }
   })
-  initial = tibble(row = seq(length(initial)), dest = initial)
-
-  if(msg) {
-    # when the msg pops up before or after the linking lines
-    when = lapply(initial, getwhen) %>% Reduce(rbind, .) %>% as.vector()
-    # msg to pop up
-    msg = lapply(initial, function(x) getmsg(x, join_type)) %>% Reduce(rbind, .) %>%
-      as.vector()
-    # filter some msg so not all of them will show up
-    msg = data.frame(name = names(initial), msg = as.character(msg))
-    msg = msg %>% group_by(msg) %>% mutate(uq = row_number()) %>%
-      ungroup() %>% mutate(msg = as.character(msg)) %>%
-      mutate(msg = ifelse(uq == 1, msg, NA)) %>% select(-uq)
-    # input the names in
-    msg = msg %>% rowwise() %>% transmute(msg = gsub("_val_", name, msg)) %>%
-      pull(msg)
-    initial = initial %>% mutate(msg = msg, when = when)
-  }
+  # when the msg pops up before or after the linking lines
+  when = lapply(initial, getwhen) %>% Reduce(rbind, .) %>% as.vector()
+  # msg to pop up
+  msg = lapply(initial, function(x) getmsg(x, join_type)) %>% Reduce(rbind, .) %>%
+    as.vector()
+  # filter some msg so not all of them will show up
+  msg = data.frame(name = names(initial), msg = as.character(msg))
+  msg = msg %>% group_by(msg) %>% mutate(uq = row_number()) %>%
+    ungroup() %>% mutate(msg = as.character(msg)) %>%
+    mutate(msg = ifelse(uq == 1, msg, NA)) %>% select(-uq)
+  # input the names in
+  msg = msg %>% rowwise() %>% transmute(msg = gsub("_val_", name, msg)) %>%
+    pull(msg)
 
   # prepare for unnest
+  initial = tibble(row = seq(length(initial)), dest = initial)
+  if(isTRUE(show_msg)) {
+    initial = initial %>% mutate(msg = msg, when = when)
+  }
   # unnest and split
   initial = initial %>% unnest() %>% split(.$row)
 
