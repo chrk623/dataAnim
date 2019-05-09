@@ -23,7 +23,7 @@ join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, hei
   if(nrow(x) >= 10 || nrow(y) >= 10) {
     stop("Dataset cannot have more than 10 rows.")
   }
-  if(nrow(x) >= 5 || nrow(y) >= 5) {
+  if(ncol(x) >= 5 || ncol(y) >= 5) {
     stop("Dataset cannot have more than 5 columns.")
   }
   # forward options using x
