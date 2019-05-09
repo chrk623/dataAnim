@@ -19,8 +19,15 @@
 #'
 #' @export
 join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL, show_msg = F) {
+  # stop if nrow(data) > 10
+  if(nrow(x) >= 10 || nrow(y) >= 10) {
+    stop("Dataset cannot have more than 10 rows.")
+  }
+  if(nrow(x) >= 5 || nrow(y) >= 5) {
+    stop("Dataset cannot have more than 5 columns.")
+  }
   # forward options using x
-  data = list(data = process_join(x = x, y = y, key = by, complete_action = FALSE,
+  data = list(data = process_join(x = x, y = y, key = by, complete_action = TRUE,
                                   show_msg = show_msg, join_type = join_type, asJSON = TRUE),
               speed = speed, join_type = join_type)
   out = htmlwidgets::createWidget(
