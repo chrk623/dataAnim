@@ -8,6 +8,7 @@
 #' @param width Width of the animation frame.
 #' @param height Height of the animation frame.
 #' @param show_msg A logical value indicating whether to show instructional messages in the animation.
+#' @param container Widget name (should match the base name of the YAML and JavaScript files used to implement the widget)
 #' @description
 #' Function to create joining animations.
 #' @examples
@@ -18,7 +19,8 @@
 #' @import htmlwidgets
 #'
 #' @export
-join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL, show_msg = F) {
+join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL,
+                      show_msg = F, container = "join_anim") {
   # stop if nrow(data) > 10
   if(nrow(x) >= 10 || nrow(y) >= 10) {
     stop("Dataset cannot have more than 10 rows.")
@@ -31,7 +33,7 @@ join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, hei
                                   show_msg = show_msg, join_type = join_type, asJSON = TRUE),
               speed = speed, join_type = join_type)
   out = htmlwidgets::createWidget(
-    name = 'join_anim',
+    name = container,
     data,
     width = width,
     height = height,
