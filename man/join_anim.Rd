@@ -22,8 +22,6 @@
   \item{height}{Height of the animation frame.}
 
   \item{show_msg}{A logical value indicating whether to show instructional messages in the animation.}
-
-  \item{container}{Widget name, id of the div containing the animation.}
 }
 \description{
   Function to create joining animations.
