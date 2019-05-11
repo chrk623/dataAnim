@@ -82,6 +82,9 @@ HTMLWidgets.widget({
             join_type = "left";
           }
           keycol_anim("x", "y", speed)
+            .on("start", function(){
+              d3.selectAll("svg").remove();
+            })
             .on("end", function() {
               join_anim(data.initial_prep, speed, join_type)
                 .on("end", () => {
