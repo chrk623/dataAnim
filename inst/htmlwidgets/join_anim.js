@@ -9,7 +9,7 @@ HTMLWidgets.widget({
 
     // TODO: define shared variables for this instance
     let svg_width = width;
-    let svg_height = height;
+    let svg_height = width / 1.6;
 
 
     return {
