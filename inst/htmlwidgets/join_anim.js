@@ -8,8 +8,8 @@ HTMLWidgets.widget({
   factory: function (el, width, height) {
 
     // TODO: define shared variables for this instance
-    let svg_width = width;
-    let svg_height = width / 1.6;
+    let svg_width = width * 0.8;
+    let svg_height = svg_width / 1.6;
 
 
     return {
