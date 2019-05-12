@@ -1830,6 +1830,7 @@ function join_anim_inner(data, speed = 1, join_type = "inner", gray_out = true) 
                   }
                   return_delay = link_rect_line(cur_left_keycol_rect, left_keycolrect_mid,
                       cur_right_keycol_rect, "right", line_tran_time, 0, msg, removeall = true);
+
                   /////////////////////////////////////////////////////////////////
 
                   //////////////////////// join data ////////////////////////////
@@ -1844,18 +1845,27 @@ function join_anim_inner(data, speed = 1, join_type = "inner", gray_out = true) 
                   shift_adjy = shift_adjy + 1
                   /////////////////////////////////////////////////////////////////
 
+
+                  /////////////////////// gray out ///////////////////////////////
+                  if(data[d][0]["dest"] != -1) {
+                    d3.select(cur_right_keycol_rect.parentNode.parentNode)
+                      .transition()
+                      .delay(return_delay + join_tran_time)
+                      .duration(gray_time)
+                      .style("opacity", 0.3);
+                      return_delay = return_delay + gray_time;
+                  }
+                  //////////////////////////////////////////////////////////////
               })
               // shift down if necessary
               if (data[d].length > 1) {
                   shift_row_down("x", og_xtbl, data[d][0]["row"] + shift_cnt, data[d].length - 1, height, shiftdown_time,
-                      0);
+                    return_delay);
                   shift_cnt = shift_cnt + data[d].length - 1;
               }
-
-
           })
 
-      delay_time = delay_time + line_tran_time + join_tran_time;
+      delay_time = delay_time + line_tran_time + join_tran_time + gray_time;
 
 
       if (data[d][0]["dest"] == -1) {
@@ -1872,13 +1882,6 @@ function join_anim_inner(data, speed = 1, join_type = "inner", gray_out = true) 
           delay_time = delay_time + join_tran_time;
       }
   })
-  d3.select("svg")
-      .transition()
-      .delay(delay_time)
-      .on("end", function () {
-          console.log("hi")
-          console.log(left_row_nodes)
-      })
 
   return delay_time;
 }
