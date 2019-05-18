@@ -81,24 +81,22 @@ HTMLWidgets.widget({
           if (join_type == "complete") {
             join_type = "left";
           }
+
           keycol_anim("x", "y", speed, start_time = 0)
             .on("end", function () {
               join_anim(data.initial_prep, speed, join_type, true)
                 .on("end", () => {
-                  console.log(iso_action)
-                  if (iso_action === "complete") {
-                    comjoin_final(data.com_act, speed)
+                  join_finalcheck(data.initial_prep)
                       .on("end", () => {
-                        iso_tbl(join_type, height, speed, 0);
-                      });
-                  } else if (iso_action == "inner") {
-                    innerjoin_final(data.initial_prep)
-                      .on("end", () => {
-                        iso_tbl(join_type, height, speed, 0);
+                        if (iso_action === "complete") {
+                          comjoin_final(data.com_act, speed)
+                            .on("end", () => {
+                              iso_tbl(join_type, height, speed, 0);
+                            });
+                        } else {
+                            iso_tbl(join_type, height, speed, 0);
+                        }
                       })
-                  } else if (iso_action == "left") {
-                    iso_tbl(join_type, height, speed, 0);
-                  }
                 })
             })
 
