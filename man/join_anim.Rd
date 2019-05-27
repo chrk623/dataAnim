@@ -4,10 +4,10 @@
 \alias{join_anim}
 \title{Joining Animation}
 \usage{
-  function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL, show_msg = F)
+  function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL, show_msg = T)
 }
 \arguments{
-  \item{join_type}{Tyoe of Join.}
+  \item{join_type}{Type of Join.}
 
   \item{x}{Table x, to pass to join.}
 
@@ -17,9 +17,9 @@
 
   \item{speed}{Speed of the animation.}
 
-  \item{width}{Width of the animation frame.}
+  \item{width}{Width of the animation frame in pixels.}
 
-  \item{height}{Height of the animation frame.}
+  \item{height}{Height of the animation frame in pixels.}
 
   \item{show_msg}{A logical value indicating whether to show instructional messages in the animation.}
 }
