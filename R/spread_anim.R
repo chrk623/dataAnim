@@ -15,8 +15,7 @@ spread_anim <- function(key, value, data, speed = 1, width = NULL, height = NULL
     stop("Only 3 columns are supported at the moment")
   }
 
-  data = list(data = process_spread(key = key, value = value, data = data,
-                                    height = height, width = width, asJSON = TRUE),
+  data = list(data = process_spread(key = key, value = value, data = data, asJSON = TRUE),
               speed = speed)
 
   out = htmlwidgets::createWidget(
