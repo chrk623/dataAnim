@@ -1,0 +1,10 @@
+dependencies:
+  - name: d3
+    version: 4.13.0
+    src: htmlwidgets/lib/d3
+    script: d3.min.js
+  - name: helpers
+    version: 0.1
+    src: htmlwidgets/lib/reshape_helpers
+    script: reshape_helpers.js
+    stylesheet: join.css

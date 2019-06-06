@@ -33,3 +33,12 @@ prepare_table = function(data, height = 3, width = 3) {
               height = height,
               cord_x = tbl_cord_x(col_width)))
 }
+num_colcharacter = function(df, key) {
+  if(missing(key)) {
+    stop("Must supply key")
+  }
+  df = df %>% select(-key)
+  info = sapply(df, class)
+  return(max(sum(info == "numeric"), sum(info == "factor")))
+}
+
