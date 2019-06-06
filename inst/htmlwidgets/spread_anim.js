@@ -14,8 +14,8 @@ HTMLWidgets.widget({
         let data = x.data;
         window.data = data;
         svg_div = "animpanel0";
-        let svg_width = data.svg_width[0];
-        let svg_height = data.svg_height[0];
+        // let svg_width = data.svg_width[0];
+        // let svg_height = data.svg_height[0];
         let otbl_width = arr_sum(data.og_w[0]);
         let rtbl_width = arr_sum(data.rslt_w[0]);
         let or_width = otbl_width + rtbl_width;
