@@ -4,7 +4,7 @@
 #' @description
 #' Function to create spreading animations.
 #' @examples
-#' data(datoy2)
+#' data(datoy_long)
 #' @author Charco Hui
 #' @import htmlwidgets
 #'
