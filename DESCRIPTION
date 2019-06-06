@@ -6,7 +6,7 @@ Description: What the package does (one paragraph).
 Depends: htmlwidgets,
   dplyr,
   tidyr,
-  jsonlite，
+  jsonlite,
   tidyr
 License: What license is it under?
 Encoding: UTF-8
