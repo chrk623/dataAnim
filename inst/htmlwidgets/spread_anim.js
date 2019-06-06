@@ -12,6 +12,7 @@ HTMLWidgets.widget({
     return {
       renderValue: function (x) {
         let data = x.data;
+        window.data = data;
         svg_div = "animpanel0";
         let svg_width = data.svg_width[0];
         let svg_height = data.svg_height[0];
