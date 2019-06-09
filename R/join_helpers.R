@@ -2,9 +2,7 @@
 initial_prep = function(from_tbl, to_tbl, key, join_type, show_msg) {
   from_ind = which(colnames(from_tbl) == key)
   to_ind = which(colnames(to_tbl) == key)
-
   initial = sapply(to_tbl[,to_ind], FUN = function(x) which(from_tbl[,from_ind] == x))
-  # turn the integer(0) to -1
   initial = lapply(initial, FUN = function(x) {
     if(length(x) == 0) {
       return(-1)

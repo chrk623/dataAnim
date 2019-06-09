@@ -4,35 +4,35 @@
 \alias{join_anim}
 \title{Joining Animation}
 \usage{
-  function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL, show_msg = T)
+join_anim(join_type = "left", x, y, by, speed = 1, width = NULL,
+  height = NULL, show_msg = F)
 }
 \arguments{
-  \item{join_type}{Type of Join.}
+\item{join_type}{Type of join.}
 
-  \item{x}{Table x, to pass to join.}
+\item{x}{Table x, to pass to join.}
 
-  \item{y}{Table y, to to pass to join.}
+\item{y}{Table y, to pass to join.}
 
-  \item{by}{A character value of the variable to join by.}
+\item{by}{A character value of the variable to join by.}
 
-  \item{speed}{Speed of the animation.}
+\item{speed}{Speed of the animation.}
 
-  \item{width}{Width of the animation frame in pixels.}
+\item{width}{Width of the animation frame.}
 
-  \item{height}{Height of the animation frame in pixels.}
+\item{height}{Height of the animation frame.}
 
-  \item{show_msg}{A logical value indicating whether to show instructional messages in the animation.}
+\item{show_msg}{A logical value indicating whether to show instructional messages in the animation.}
 }
 \description{
-  Function to create joining animations.
+Function to create joining animations.
 }
 \examples{
-  data(datoy1)
-  join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
-  join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = F)
-  myanim = join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
-  htmlwidgets::saveWidget(myanim)
+data(datoy1)
+join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
+myanim = join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = F)
+htmlwidgets::saveWidget(myanim)
 }
 \author{
-  Charco Hui
+Charco Hui
 }

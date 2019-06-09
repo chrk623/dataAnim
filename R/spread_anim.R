@@ -1,16 +1,23 @@
 #' Spread Animation
 #'
-#' @param x xx
+#' @param key Column used to spread out to multiple columns.
+#' @param value Column containing values of the key.
+#' @param data Data to pass into the function.
+#' @param speed Speed of the animation.
+#' @param width Width of the animation frame in pixels.
+#' @param height Height of the animation frame in pixels.
 #' @description
-#' Function to create spreading animations.
+#' Long to Wide transformation.
 #' @examples
-#' data(datoy_long)
+#' data(toyda_long)
+#' spread_anim(key = "Subject", value = "Score", data = toyda_long)
+#' myanim = spread_anim(key = "Subject", value = "Score", data = toyda_long)
+#' htmlwidgets::saveWidget(myanim, file = "myanim.html")
 #' @author Charco Hui
 #' @import htmlwidgets
 #'
 #' @export
-spread_anim <- function(key, value, data, speed = 1, width = NULL, height = NULL,
-                      show_msg = T) {
+spread_anim <- function(key, value, data, speed = 1, width = NULL, height = NULL) {
   if(ncol(data) > 3) {
     stop("Only 3 columns are supported at the moment")
   }

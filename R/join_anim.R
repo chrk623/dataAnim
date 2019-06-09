@@ -13,7 +13,8 @@
 #' @examples
 #' data(datoy1)
 #' join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
-#' join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = F)
+#' myanim = join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = F)
+#' htmlwidgets::saveWidget(myanim)
 #' @author Charco Hui
 #' @import htmlwidgets
 #'
