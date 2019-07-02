@@ -35,7 +35,11 @@ data(datoy1)
 join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
 ```
 
+<center>
+
 ![leftgif](man/gifs/left.gif)
+
+</center>
 
 ### Wide to Long (Gather)
 
@@ -44,7 +48,11 @@ data(datoy_wide)
 gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
 ```
 
+<center>
+
 ![w2lgif](man/gifs/w2l.gif)
+
+</center>
 
 ## Background
 
