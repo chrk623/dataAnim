@@ -8,7 +8,7 @@ join_anim(join_type = "left", x, y, by, speed = 1, width = NULL,
   height = NULL, show_msg = F)
 }
 \arguments{
-\item{join_type}{Type of join.}
+\item{join_type}{Type of join. Supported joins: "left", "inner", "complete"/"full".}
 
 \item{x}{Table x, to pass to join.}
 

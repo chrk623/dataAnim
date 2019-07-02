@@ -26,9 +26,9 @@ gather_anim(key, value, data, col, speed = 1, width = NULL,
 Wide to long transformation.
 }
 \examples{
-data(toyda_wide)
-gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = toyda_wide)
-myanim = gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = toyda_wide)
+data(datoy_wide)
+gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
+myanim = gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
 htmlwidgets::saveWidget(myanim, file = "myanim.html")
 }
 \author{

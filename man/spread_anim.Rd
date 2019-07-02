@@ -23,9 +23,9 @@ spread_anim(key, value, data, speed = 1, width = NULL, height = NULL)
 Long to Wide transformation.
 }
 \examples{
-data(toyda_long)
-spread_anim(key = "Subject", value = "Score", data = toyda_long)
-myanim = spread_anim(key = "Subject", value = "Score", data = toyda_long)
+data(datoy_long)
+spread_anim(key = "Subject", value = "Score", data = datoy_long)
+myanim = spread_anim(key = "Subject", value = "Score", data = datoy_long)
 htmlwidgets::saveWidget(myanim, file = "myanim.html")
 }
 \author{

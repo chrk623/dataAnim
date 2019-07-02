@@ -1,6 +1,6 @@
 #' Joining Animation
 #'
-#' @param join_type Type of join.
+#' @param join_type Type of join. Supported joins: "left", "inner", "complete"/"full".
 #' @param x Table x, to pass to join.
 #' @param y Table y, to pass to join.
 #' @param by A character value of the variable to join by.
@@ -21,6 +21,12 @@
 #' @export
 join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL,
                       show_msg = F) {
+  if(join_type == "full") {
+    join_type = "complete"
+  }
+  if(!(join_type %in% c("left", "inner", "complete"))) {
+    stop("Only left, inner and complete/full joins are supported at the moment.")
+  }
   if(nrow(x) >= 10 || nrow(y) >= 10) {
     stop("Dataset cannot have more than 10 rows.")
   }

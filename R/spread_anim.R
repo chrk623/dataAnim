@@ -9,9 +9,9 @@
 #' @description
 #' Long to Wide transformation.
 #' @examples
-#' data(toyda_long)
-#' spread_anim(key = "Subject", value = "Score", data = toyda_long)
-#' myanim = spread_anim(key = "Subject", value = "Score", data = toyda_long)
+#' data(datoy_long)
+#' spread_anim(key = "Subject", value = "Score", data = datoy_long)
+#' myanim = spread_anim(key = "Subject", value = "Score", data = datoy_long)
 #' htmlwidgets::saveWidget(myanim, file = "myanim.html")
 #' @author Charco Hui
 #' @import htmlwidgets
@@ -21,10 +21,8 @@ spread_anim <- function(key, value, data, speed = 1, width = NULL, height = NULL
   if(ncol(data) > 3) {
     stop("Only 3 columns are supported at the moment")
   }
-
   data = list(data = process_spread(key = key, value = value, data = data, asJSON = TRUE),
               speed = speed)
-
   out = htmlwidgets::createWidget(
     name = "spread_anim",
     data,
