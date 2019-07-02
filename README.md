@@ -6,6 +6,7 @@ A R package to generate animations for simple data wrangling operations.
   - [Installation](#installation)
   - [Examples](#examples)
       - [Left Join](#left-join)
+      - [Wide to Long](#wide-to-long-gather)
   - [Backgound](#background)
       - [Abstract](#abstract)
 
@@ -34,7 +35,7 @@ data(datoy1)
 join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
 ```
 
-![](https://i.imgur.com/cklokwF.gif)
+![leftgif](man/gifs/left.gif)
 
 ### Wide to Long (Gather)
 
@@ -43,7 +44,7 @@ data(datoy_wide)
 gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
 ```
 
-![](https://i.imgur.com/27xwqjk.gif)
+![w2lgif](man/gifs/w2l.gif)
 
 ## Background
 
