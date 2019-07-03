@@ -6,7 +6,10 @@ A R package to generate animations for simple data wrangling operations.
   - [Installation](#installation)
   - [Examples](#examples)
       - [Left Join](#left-join)
+      - [Inner Join](#inner-join)
+      - [Full Join](#full-join)
       - [Wide to Long](#wide-to-long-gather)
+      - [Long to Wide](#long-to-wide-spread)
   - [Backgound](#background)
       - [Abstract](#abstract)
 
@@ -31,15 +34,28 @@ will change overtime.*
 ### Left Join
 
 ``` r
+library(dataAnim)
 data(datoy1)
 join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
 ```
 
-<center>
-
 ![leftgif](man/gifs/left.gif)
 
-</center>
+### Inner Join
+
+``` r
+join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
+```
+
+![innergif](man/gifs/inner.gif)
+
+### Full Join
+
+``` r
+join_anim(join_type = "full", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
+```
+
+![fullgif](man/gifs/full.gif)
 
 ### Wide to Long (Gather)
 
@@ -48,11 +64,16 @@ data(datoy_wide)
 gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
 ```
 
-<center>
-
 ![w2lgif](man/gifs/w2l.gif)
 
-</center>
+### Long to Wide (Spread)
+
+``` r
+data(datoy_long)
+spread_anim(key = "Subject", value = "Score", data = datoy_long)
+```
+
+![l2wgif](man/gifs/l2w.gif)
 
 ## Background
 
