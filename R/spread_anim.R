@@ -33,11 +33,10 @@ spread_anim <- function(key, value, data, speed = 1, width = NULL, height = NULL
   return(out)
 }
 
-#' @export
 spread_animOutput <- function(outputId, width = "100%", height = "1000") {
   shinyWidgetOutput(outputId, "spread_anim", width, height, package = "dataAnim")
 }
-#' @export
+
 spread_animRender <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
   shinyRenderWidget(expr, spread_animOutput, env, quoted = TRUE)

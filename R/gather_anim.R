@@ -11,8 +11,18 @@
 #' Wide to long transformation.
 #' @examples
 #' data(datoy_wide)
-#' gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
-#' myanim = gather_anim(key = "Subject", value = "Score", col = c("English", "Maths"), data = datoy_wide)
+#' gather_anim(
+#'   key = "Subject",
+#'   value = "Score",
+#'   col = c("English", "Maths"),
+#'   data = datoy_wide
+#' )
+#' myanim = gather_anim(
+#'   key = "Subject",
+#'   value = "Score",
+#'   col = c("English", "Maths"),
+#'   data = datoy_wide
+#' )
 #' htmlwidgets::saveWidget(myanim, file = "myanim.html")
 #' @author Charco Hui
 #' @import htmlwidgets
@@ -34,12 +44,11 @@ gather_anim <- function(key, value, data, col, speed = 1, width = NULL, height =
   return(out)
 }
 
-#' @export
 gather_animOutput <- function(outputId, width = "100%", height = "1000") {
-  shinyWidgetOutput(outputId, "gather_anim", width, height, package = "dataAnim")
+  htmlwidgets::shinyWidgetOutput(outputId, "gather_anim", width, height, package = "dataAnim")
 }
-#' @export
+
 gather_animRender <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  shinyRenderWidget(expr, spread_animOutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr, spread_animOutput, env, quoted = TRUE)
 }

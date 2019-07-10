@@ -13,8 +13,8 @@ outersect = function(x, y){
 }
 col_max_width = function(obj, width, ...){
   obj = as_tibble(apply(obj, 2, as.character))
-  obj = obj %>% transmute_all(nchar) %>%
-    summarise_all(max, na.rm = T) %>% as.matrix()
+  obj = obj %>% dplyr::transmute_all(nchar) %>%
+    dplyr::summarise_all(max, na.rm = TRUE) %>% as.matrix()
   obj = ifelse(obj < width, width, obj)
   return(obj)
 }

@@ -5,7 +5,7 @@
 \title{Joining Animation}
 \usage{
 join_anim(join_type = "left", x, y, by, speed = 1, width = NULL,
-  height = NULL, show_msg = F)
+  height = NULL, show_msg = FALSE)
 }
 \arguments{
 \item{join_type}{Type of join. Supported joins: "left", "inner", "complete"/"full".}
@@ -29,9 +29,24 @@ Function to create joining animations.
 }
 \examples{
 data(datoy1)
-join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
-myanim = join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = F)
-htmlwidgets::saveWidget(myanim)
+join_anim(
+  join_type = "left",
+  speed = 1,
+  x = datoy1$x,
+  y = datoy1$y,
+  by = "Name",
+  show_msg = TRUE
+)
+
+myanim = join_anim(
+  join_type = "inner",
+  speed = 1,
+  x = datoy1$x,
+  y = datoy1$y,
+  by = "Name",
+  show_msg = FALSE
+)
+htmlwidgets::saveWidget(myanim, file = "myanim.html")
 }
 \author{
 Charco Hui

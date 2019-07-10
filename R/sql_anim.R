@@ -3,7 +3,7 @@ process_sql = function(input, data) {
   output = list()
   cols.df = data.frame(cols = colnames(data)) %>%
     mutate(col_num = row_number())
-  data2 = data %>% tbl_df()
+  data2 = as_tibble(data)
   # select
   if(!is.null(input$select)) {
     select_list = list(col = which(colnames(data) %in% input$select),

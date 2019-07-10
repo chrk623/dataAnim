@@ -11,8 +11,11 @@ process_join = function(x, y, key, height = 2, width = 5, svg_width = 1920, svg_
               y_key_col = find_key_col(y, key = key),
               svg_width = svg_width, svg_height = svg_height)
   if(isTRUE(complete_action)) {
+    # Quiet R CMD check NOTE
+    dest <- NULL
+
     row2move = temp$initial_prep %>% Reduce(rbind, .) %>%
-      filter(dest != -1) %>% pull(dest) %>%
+      filter(dest != -1) %>% .[["dest"]] %>%
       unique()
     row2move = outersect(1:nrow(y), row2move)
     col_ind = sapply(colnames(temp$y), function(x){
