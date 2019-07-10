@@ -1,7 +1,7 @@
 # key: Name of column containing the new column names
 # value: Name of column containing values
 process_spread = function(key, value, data, height = 2, width = 5, svg_width = 1920,
-                          svg_height = 1080, show_msg = T, asJSON = FALSE) {
+                          svg_height = 1080, show_msg = TRUE, asJSON = FALSE) {
   if(ncol(data) != 3) {
     stop("Inputted dataset must have 3 columns for the animation to work")
   } else if(ncol(data) > 3) {
@@ -27,7 +27,7 @@ process_spread = function(key, value, data, height = 2, width = 5, svg_width = 1
   split_data = apply(key_seq, 1, function(x) data[x[1]:x[2],])
   key_rowseq = lapply(split_data, function(x) {
     inner_join(result %>% select(pivot_ind) %>% mutate(`__rn` = row_number()),
-               x, by = "Name") %>% pull(`__rn`)
+               x, by = "Name") %>% .[["__rn"]]
   })
   pivot_rows = which(!duplicated(data[,pivot_ind]))
 
@@ -51,7 +51,7 @@ process_spread = function(key, value, data, height = 2, width = 5, svg_width = 1
 # value: column name representing variable values
 # col: columns to retain for the transformation
 process_gather = function(key, value, col, data, height = 2, width = 5, svg_width = 1920,
-                          svg_height = 1080, show_msg = T, asJSON = FALSE) {
+                          svg_height = 1080, show_msg = TRUE, asJSON = FALSE) {
   if(missing(col)) {
     stop("Columns to keep must be specified.")
   }

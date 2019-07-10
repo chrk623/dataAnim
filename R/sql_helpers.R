@@ -1,6 +1,6 @@
 # sql helpers
 strsplit2 = function(x, split, type = "remove", perl = FALSE,
-                     ws = F, ...) {
+                     ws = FALSE, ...) {
   if(isTRUE(ws)) {
     x = gsub(pattern = " ", replacement = "", x = x)
   }
@@ -47,7 +47,7 @@ mutate_example = function(params) {
     return(sprintf("example: new_var = %s + %s", params[1], params[2]))
   }
 }
-convert_mutate_steps = function(steps, supported_ops = sup_ops,
+convert_mutate_steps = function(steps, supported_ops,
                                 data) {
   step_id = rep("num", length(steps))
   # check which step is a column
@@ -60,7 +60,7 @@ convert_mutate_steps = function(steps, supported_ops = sup_ops,
 
   return(data.frame(steps = steps, step_id = step_id))
 }
-process_mutate = function(data, exprs, supported_ops = sup_ops,
+process_mutate = function(data, exprs, supported_ops,
                           placeholder = "..placeholder..") {
   # data = data %>% select(-!!sym(placeholder))
   # check for supported ops
@@ -80,13 +80,13 @@ process_mutate = function(data, exprs, supported_ops = sup_ops,
     data = tryCatch({
       data %>% mutate(!!sym(input[1]) := !!parse_expr(input[2]))
     }, error = function(e) e)
-    steps = strsplit_keep(x = input[2], split = supported_ops, ws = T) %>%
+    steps = strsplit_keep(x = input[2], split = supported_ops, ws = TRUE) %>%
       as.character()
   } else {
     data = tryCatch({
       data %>% mutate(!!!parse_exprs(exprs))
     }, error = function(e) e)
-    steps = strsplit_keep(x = input[1], split = supported_ops, ws = T) %>%
+    steps = strsplit_keep(x = input[1], split = supported_ops, ws = TRUE) %>%
       as.character()
   }
   if("error" %in% class(data)) {
@@ -95,7 +95,7 @@ process_mutate = function(data, exprs, supported_ops = sup_ops,
   out_colname = colnames(data)[ncol(data)]
   out_col = ncol(data)
   return(list(data = data, colname = out_colname, col = out_col,
-              steps = convert_mutate_steps(steps, supported_ops = sup_ops,
+              steps = convert_mutate_steps(steps, supported_ops = supported_ops,
                                            data)))
 }
 process_summarise = function(data, summarise_vars, summarise_exprs, groupby = NULL) {
@@ -108,6 +108,10 @@ process_summarise = function(data, summarise_vars, summarise_exprs, groupby = NU
     # summarise.df2 = left_join(summarise.df, data, by = groupby)
     summarise.df2 = data %>% arrange(!!!syms(groupby))
     # select(!!!syms(groupby), ..placeholder..)
+
+    # Quiet R CMD check NOTE
+    ..placeholder.. <- ..placeholder2.. <- NULL
+
     # vertical reordering index
     summarise_orderV = summarise.df2 %>%
       mutate(..placeholder2.. = row_number()) %>%
@@ -136,12 +140,12 @@ process_summarise = function(data, summarise_vars, summarise_exprs, groupby = NU
                 new_col = new_col, new_colname = new_colname,
                 summarise_col = summarise_col, remove_col = remove_col,
                 new_data = new_data, new_data_width = new_data_width,
-                new_data_cordx = tbl_cord_x(new_data_width), grouped = T))
+                new_data_cordx = tbl_cord_x(new_data_width), grouped = TRUE))
   } else {
     summarise.df = data %>%
       summarise(!!!parse_exprs(summarise_exprs))
     return(list(new_colnames = colnames(summarise.df),
-                new_data = summarise.df, grouped = F))
+                new_data = summarise.df, grouped = FALSE))
   }
 }
 

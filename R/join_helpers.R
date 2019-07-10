@@ -16,6 +16,8 @@ initial_prep = function(from_tbl, to_tbl, key, join_type, show_msg) {
   msg = lapply(initial, function(x) getmsg(x, join_type)) %>% Reduce(rbind, .) %>%
     as.vector()
   # filter some msg so not all of them will show up
+  uq <- name <- NULL # quiet R CMD check NOTE
+
   msg = data.frame(name = names(initial), msg = as.character(msg))
   msg = msg %>% group_by(msg) %>% mutate(uq = row_number()) %>%
     ungroup() %>% mutate(msg = as.character(msg)) %>%
@@ -42,7 +44,10 @@ find_key_col = function(obj, key, minus1 = FALSE){
     return(ans)
   }
 }
-xy_loc = function(from_tbl, to_tbl, result_tbl, key, minus1 = F) {
+xy_loc = function(from_tbl, to_tbl, result_tbl, key, minus1 = FALSE) {
+  # Quiet R CMD check note
+  start <- stop <- NULL
+
   result_tbl = result_tbl %>% mutate(stop = row_number())
   from_cn = colnames(from_tbl)
   from_tbl = from_tbl %>% mutate(start = row_number())
@@ -50,7 +55,7 @@ xy_loc = function(from_tbl, to_tbl, result_tbl, key, minus1 = F) {
     select(start, stop) %>% na.omit() %>% arrange(stop)
   return(out)
 }
-xy_loc2 = function(from_tbl, to_tbl, result_tbl, key, minus1 = F) {
+xy_loc2 = function(from_tbl, to_tbl, result_tbl, key, minus1 = FALSE) {
   result_tbl = result_tbl %>% group_by(!!!syms(colnames(to_tbl))) %>%
     mutate(addrow = row_number()) %>% ungroup()
 
@@ -62,8 +67,9 @@ xy_loc2 = function(from_tbl, to_tbl, result_tbl, key, minus1 = F) {
   result_tbl = left_join(result_tbl, from_tbl, by = from_cn) %>%
     left_join(., to_tbl, by = to_cn) %>%
     mutate(stop = row_number())
-  #
-  if(minus1 == T) {
+  # Quiet R CMD check note
+  start <- stop <- addrow <- NULL
+  if(minus1) {
     result_tbl = result_tbl %>%
       mutate(start = start - 1, stop = stop - 1)
   }

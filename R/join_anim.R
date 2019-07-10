@@ -12,15 +12,30 @@
 #' Function to create joining animations.
 #' @examples
 #' data(datoy1)
-#' join_anim(join_type = "left", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = T)
-#' myanim = join_anim(join_type = "inner", speed = 1, x = datoy1$x, y = datoy1$y, by = "Name", show_msg = F)
-#' htmlwidgets::saveWidget(myanim)
+#' join_anim(
+#'   join_type = "left",
+#'   speed = 1,
+#'   x = datoy1$x,
+#'   y = datoy1$y,
+#'   by = "Name",
+#'   show_msg = TRUE
+#' )
+#'
+#' myanim = join_anim(
+#'   join_type = "inner",
+#'   speed = 1,
+#'   x = datoy1$x,
+#'   y = datoy1$y,
+#'   by = "Name",
+#'   show_msg = FALSE
+#' )
+#' htmlwidgets::saveWidget(myanim, file = "myanim.html")
 #' @author Charco Hui
 #' @import htmlwidgets
 #'
 #' @export
 join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, height = NULL,
-                      show_msg = F) {
+                      show_msg = FALSE) {
   if(join_type == "full") {
     join_type = "complete"
   }
@@ -46,11 +61,10 @@ join_anim <- function(join_type = "left", x, y, by, speed = 1, width = NULL, hei
   return(out)
 }
 
-#' @export
 join_animOutput <- function(outputId, width = "100%", height = "1000") {
   shinyWidgetOutput(outputId, "join_anim", width, height, package = "dataAnim")
 }
-#' @export
+
 join_animRender <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
   shinyRenderWidget(expr, join_animOutput, env, quoted = TRUE)
